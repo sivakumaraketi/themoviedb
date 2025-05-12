@@ -1,0 +1,26 @@
+# Ignore Swift build folders
+.build/
+DerivedData/
+
+# Ignore user-specific Xcode project settings
+*.xcuserstate
+*.xcworkspace
+
+# Ignore environment configuration files that contain sensitive information
+.env
+
+# CocoaPods
+Pods/
+
+# Swift Package Manager
+.swiftpm/
+
+# Ignore Xcode's default build settings
+build/
+
+# Ignore log files
+*.log
+
+# Ignore temporary files
+*.swp
+.DS_Store
