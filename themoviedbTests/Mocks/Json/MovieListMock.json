@@ -1,0 +1,40 @@
+
+{
+  "dates": {
+    "maximum": "2025-05-30",
+    "minimum": "2025-05-01"
+  },
+  "page": 1,
+  "results": [
+    {
+      "id": 123,
+      "title": "Sample Movie",
+      "original_title": "Sample Movie Original",
+      "overview": "A sample movie overview.",
+      "poster_path": "/sampleposter.jpg",
+      "backdrop_path": "/samplebackdrop.jpg",
+      "release_date": "2025-05-15",
+      "vote_average": 7.8,
+      "vote_count": 100,
+      "popularity": 500.0,
+      "genre_ids": [12, 18],
+      "adult": false
+    },
+    {
+      "id": 456,
+      "title": "Another Movie",
+      "original_title": "Another Movie Original",
+      "overview": "Another movie overview.",
+      "poster_path": "/anotherposter.jpg",
+      "backdrop_path": "/anotherbackdrop.jpg",
+      "release_date": "2025-05-10",
+      "vote_average": 6.5,
+      "vote_count": 80,
+      "popularity": 300.0,
+      "genre_ids": [28, 35],
+      "adult": false
+    }
+  ],
+  "total_pages": 10,
+  "total_results": 200
+}

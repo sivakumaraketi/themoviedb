@@ -5,6 +5,7 @@
 //  Created by Siva kumar Aketi on 14/05/25.
 //
 
+/// MovieDetail model representing movie details fetched from TMDB API.
 struct MovieDetail: Codable {
     let id: Int
     let title: String
@@ -18,8 +19,6 @@ struct MovieDetail: Codable {
     let status: String?
     let budget: Int?
     let revenue: Int?
-    //let productionCompanies: [ProductionCompanies]?
-    //let spokenLanguages: [SpokenLanguage]?
     let homepage: String?
     let imdbID: String?
 
@@ -32,8 +31,6 @@ struct MovieDetail: Codable {
         case revenue
         case status
         case imdbID = "imdb_id"
-       // case spokenLanguages = "spoken_languages"
-       // case productionCompanies = "production_companies"
         case releaseDate = "release_date"
         case voteAverage = "vote_average"
         case posterPath = "poster_path"
@@ -41,39 +38,11 @@ struct MovieDetail: Codable {
         case genres
         case runtime
     }
-
+    /// Genre of the movie.
     struct Genre: Codable {
         let id: Int
         let name: String
     }
-    
-//    struct SpokenLanguage: Codable, Identifiable {
-//        var id: String { iso639_1 }
-//
-//        let englishName: String
-//        let iso639_1: String
-//        let name: String
-//
-//        enum CodingKeys: String, CodingKey {
-//            case englishName = "english_name"
-//            case iso639_1
-//            case name
-//        }
-//    }
-    
-//    struct ProductionCompanies: Codable, Identifiable {
-//        let id: String
-//        let logo_path: String
-//        let name: String
-//        let origin_country: String
-//
-//        enum CodingKeys: String, CodingKey {
-//            case id
-//            case logo_path
-//            case name
-//            case origin_country
-//        }
-//    }
 }
 
 

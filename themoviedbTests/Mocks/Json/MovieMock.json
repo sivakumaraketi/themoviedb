@@ -1,0 +1,15 @@
+
+{
+    "id": 123,
+    "title": "Sample Movie",
+    "original_title": "Sample Movie Original",
+    "overview": "This is a sample movie overview.",
+    "poster_path": "/sampleposter.jpg",
+    "backdrop_path": "/samplebackdrop.jpg",
+    "release_date": "2025-05-15",
+    "vote_average": 7.8,
+    "vote_count": 150,
+    "popularity": 100.0,
+    "genre_ids": [28, 12],
+    "adult": false
+}

@@ -7,30 +7,63 @@
 
 import Foundation
 
-enum NetworkError: Error {
+/// Enum for common networking errors.
+enum NetworkError: Error, LocalizedError {
     case invalidURL
-    case decodingError
-    case serverError
+    case decodingError(Error)
+    case serverError(statusCode: Int, message: String)
+    case unknown(Error)
+    case invalidQuery
+    
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:
+            return AppConstants.Error.inValidUrl
+        case .decodingError(let error):
+            return "\(AppConstants.Error.decodeError) \(error.localizedDescription)"
+        case .serverError(let statusCode, let message):
+            return "\(AppConstants.Error.serverError) \(statusCode): \(message)"
+        case .unknown(let error):
+            return "\(AppConstants.Error.unknownError) \(error.localizedDescription)"
+        case .invalidQuery:
+            return AppConstants.Error.invalidQueryError
+        }
+    }
 }
 
+/// Sends a request and decodes the response to a generic Decodable type.
 final class NetworkManager {
     static let shared = NetworkManager()
-    private init() {}
-
+    private let session: URLSession
+    
+    /// Allows custom session injection (useful for unit testing).
+    init(session: URLSession = .shared) {
+        self.session = session
+    }
+    
+    /// Sends a request and decodes the response to a generic Decodable type.
     func request<T: Decodable>(url: URL) async throws -> T {
-        let (data, response) = try await URLSession.shared.data(from: url)
-
-        guard let httpResponse = response as? HTTPURLResponse, 200..<300 ~= httpResponse.statusCode else {
-            throw NetworkError.serverError
-        }
-
+        let (data, response): (Data, URLResponse)
+        
         do {
-            print("urlstrresp1", data)
-            print("urlstrresp", try? JSONDecoder().decode(T.self, from: data))
+            (data, response) = try await session.data(from: url)
+        } catch {
+            throw NetworkError.unknown(error)
+        }
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.serverError(statusCode: -1, message: AppConstants.Error.inValidServerResponse)
+        }
+        
+        guard 200..<300 ~= httpResponse.statusCode else {
+            let message = String(data: data, encoding: .utf8) ?? AppConstants.Error.noError
+            throw NetworkError.serverError(statusCode: httpResponse.statusCode, message: message)
+        }
+        
+        do {
             return try JSONDecoder().decode(T.self, from: data)
         } catch {
-            print("Decoding error: \(error)")
-            throw NetworkError.decodingError
+            throw NetworkError.decodingError(error)
         }
     }
 }

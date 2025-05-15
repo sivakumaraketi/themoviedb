@@ -9,10 +9,11 @@
 import Foundation
 import Combine
 
-class SearchViewModel: ObservableObject {
+/// ViewModel that manages movie search functionality
+/// Requires at least 3 characters to initiate search
+final class SearchViewModel: ObservableObject {
     @Published var searchText: String = "" {
         didSet {
-            print("searchText", searchText)
             if searchText.count >= 3 {  // Trigger search only if 3 or more characters
                 searchMovies(query: searchText)
             }
@@ -22,7 +23,11 @@ class SearchViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
     
-    private var cancellables = Set<AnyCancellable>()
+    private let service: TMDBServiceProtocol
+
+        init(service: TMDBServiceProtocol = TMDBService.shared) {
+            self.service = service
+        }
     
     func searchMovies(query: String) {
         guard !query.isEmpty else {
@@ -39,7 +44,7 @@ class SearchViewModel: ObservableObject {
         
         Task {
             do {
-                let result = try await TMDBService.shared.searchMovies(query: query)
+                let result = try await service.searchMovies(query: query)
                 await MainActor.run {
                     self.suggestions = result.results
                     self.isLoading = false

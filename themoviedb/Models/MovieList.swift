@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Represents the API response for a paginated list of now playing movies
 struct MovieList: Decodable {
     let dates: Dates?
     let page: Int

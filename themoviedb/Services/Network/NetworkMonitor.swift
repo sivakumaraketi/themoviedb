@@ -8,6 +8,7 @@
 import Network
 import Combine
 
+/// Enum for common networking errors, conforming to Error and LocalizedError for better error handling.
 enum ConnectionType: String {
     case wifi = "WiFi"
     case cellular = "Cellular"
@@ -16,6 +17,8 @@ enum ConnectionType: String {
     case disconnected = "Disconnected"
 }
 
+/// Handles HTTP requests and decodes JSON responses into Swift models.
+/// Uses Swift concurrency (async/await) for asynchronous networking.
 final class NetworkMonitor {
     
     static let shared = NetworkMonitor()

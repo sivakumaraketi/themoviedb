@@ -1,0 +1,20 @@
+
+{
+  "id": 101,
+  "title": "Inception",
+  "overview": "A mind-bending thriller",
+  "release_date": "2010-07-16",
+  "vote_average": 8.8,
+  "poster_path": "/inception.jpg",
+  "tagline": "Your mind is the scene of the crime.",
+  "runtime": 148,
+  "genres": [
+    { "id": 28, "name": "Action" },
+    { "id": 878, "name": "Science Fiction" }
+  ],
+  "status": "Released",
+  "budget": 160000000,
+  "revenue": 825532764,
+  "homepage": "https://google.com/",
+  "imdb_id": "tt1375666"
+}

@@ -6,8 +6,6 @@ DerivedData/
 *.xcuserstate
 *.xcworkspace
 
-# Ignore environment configuration files that contain sensitive information
-.env
 
 # CocoaPods
 Pods/
@@ -24,3 +22,4 @@ build/
 # Ignore temporary files
 *.swp
 .DS_Store
+

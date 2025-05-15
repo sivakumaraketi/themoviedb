@@ -8,29 +8,38 @@
 
 import SwiftUI
 
+/// A reusable search bar component with a text field with search icon
 struct SearchBarView: View {
     @Binding var text: String
-
+    
     var body: some View {
         HStack {
-            Image(systemName: "magnifyingglass")
+            Image(systemName: AppConstants.Search.systemName)
                 .foregroundColor(.gray)
-
-            TextField("Search movies...", text: $text)
+            
+            TextField(AppConstants.Search.searchTitle, text: $text)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-
+                .accessibilityLabel(AppConstants.Search.accessiblitySearchTitle)
+                .accessibilityHint(AppConstants.Search.accessiblitySearchHint)
+            
             if !text.isEmpty {
-                Button(action: { text = "" }) {
-                    Image(systemName: "xmark.circle.fill")
+                Button(action: {
+                    withAnimation(.easeInOut) {
+                        text = ""
+                    }
+                }) {
+                    Image(systemName: AppConstants.Search.systemButtonName)
                         .foregroundColor(.gray)
                 }
+                .accessibilityLabel(AppConstants.Search.accessiblitySearch)
             }
         }
         .padding(8)
         .background(Color(.systemGray6))
         .cornerRadius(10)
-        .padding([.horizontal, .top])
-        .frame(maxWidth: .infinity)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 1))
     }
 }

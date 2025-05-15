@@ -7,14 +7,15 @@
 
 import Foundation
 
-struct Movie: Decodable, Identifiable {
+/// Movie model representing movie list fetched from TMDB API.
+struct Movie: Decodable, Identifiable , Equatable {
     let id: Int
         let title: String
         let originalTitle: String
         let overview: String
         let posterPath: String?
         let backdropPath: String?
-        let releaseDate: String
+        let releaseDate: String?
         let voteAverage: Double
         let voteCount: Int
         let popularity: Double
