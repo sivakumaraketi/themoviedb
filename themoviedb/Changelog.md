@@ -16,3 +16,6 @@
 - Replaced SwiftUI's AsyncImage with Kingfisher due to caching limitations.
 - Expanded test coverage and introduced dependency injection to enhance testability and modularity.
 
+#16th May 2025
+- Added splash screen
+

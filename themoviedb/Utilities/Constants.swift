@@ -71,4 +71,8 @@ struct AppConstants {
         static let accessiblitySearchHint = "Type to search for movies"
     }
     
+    struct splash {
+        static let logoTitle = "The Movie DB"
+    }
+    
 }
