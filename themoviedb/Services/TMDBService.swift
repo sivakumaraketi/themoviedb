@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Combine
 
 /// Protocols for the TMDB service
 protocol TMDBServiceProtocol {
@@ -18,13 +17,10 @@ protocol TMDBServiceProtocol {
 /// Final class to interact with the movie database API
 final class TMDBService: TMDBServiceProtocol {
     
-    /// Singleton instance for global share
-    static let shared = TMDBService()
-    
     private let networkManager: NetworkManager
     
     /// Allow injection for unit tests
-    init(networkManager: NetworkManager = .shared) {
+    init(networkManager: NetworkManager) {
         self.networkManager = networkManager
     }
     

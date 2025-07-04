@@ -12,34 +12,35 @@ import Kingfisher
 /// ViewModel responsible for fetching and managing the list of now-playing movies,
 /// handling pagination, loading state, and error messages for the movie list view.
 @MainActor
-final class MovieListViewModel: ObservableObject {
-    // MARK: – Published state
-    @Published private(set) var movies: [Movie] = []
+final class MovieListViewModel: BaseViewModel {
+    // MARK: - Published state
+    @Published private(set) var movies: [MovieEntity] = []
     @Published private(set) var isLoading = false
-    @Published var errorMessage: String?
     
     // MARK: - Debounce Control
-     private var lastFetchTime: Date = .distantPast
-     private let fetchCooldown: TimeInterval = 0.5 
-
-    // MARK: – Paging state
+    private var lastFetchTime: Date = .distantPast
+    private let fetchCooldown: TimeInterval = AppConfiguration.UI.fetchCooldown
+    
+    // MARK: - Paging state
     private var currentPage = 1
     private var totalPages = 1
     var canLoadMore: Bool { currentPage <= totalPages }
     
-    private let service: TMDBServiceProtocol
+    // MARK: - Use Cases
+    private let fetchNowPlayingMoviesUseCase: FetchNowPlayingMoviesUseCaseProtocol
     
-    init(service: TMDBServiceProtocol = TMDBService.shared) {
-        self.service = service
+    init(fetchNowPlayingMoviesUseCase: FetchNowPlayingMoviesUseCaseProtocol) {
+        self.fetchNowPlayingMoviesUseCase = fetchNowPlayingMoviesUseCase
+        super.init()
     }
     
     // Expose deduplicated movies to the View to avoid duplicate IDs in UI
-    var uniqueMovies: [Movie] {
+    var uniqueMovies: [MovieEntity] {
         var seen = Set<Int>()
         return movies.filter { seen.insert($0.id).inserted }
     }
-
-    // MARK: – Public API
+    
+    // MARK: - Public API
     
     // Initial or fresh fetch - reset pagination
     func fetchNowPlayingMovies() async {
@@ -51,10 +52,10 @@ final class MovieListViewModel: ObservableObject {
     // Pagination load for next pages
     func fetchNextPageIfNeeded() async {
         // Debounce check
-               guard Date().timeIntervalSince(lastFetchTime) > fetchCooldown else {
-                   return
-               }
-               
+        guard Date().timeIntervalSince(lastFetchTime) > fetchCooldown else {
+            return
+        }
+        
         guard !isLoading, canLoadMore else { return }
         await fetch()
     }
@@ -64,22 +65,22 @@ final class MovieListViewModel: ObservableObject {
         resetPagination()
         await fetch()
     }
-
-    // MARK: – Private helpers
+    
+    // MARK: - Private helpers
     
     private func resetPagination() {
         currentPage = 1
         totalPages = 1
         movies.removeAll()
-        errorMessage = nil
+        clearError()
     }
     
     private func fetch() async {
+        setLoading()
         isLoading = true
-        errorMessage = nil
         
         do {
-            let result = try await service.fetchNowPlayingMovies(page: currentPage)
+            let result = try await fetchNowPlayingMoviesUseCase.execute(page: currentPage)
             
             // Append new results avoiding duplicates
             let newMovies = result.results.filter { newMovie in
@@ -88,9 +89,12 @@ final class MovieListViewModel: ObservableObject {
             movies.append(contentsOf: newMovies)
             
             currentPage += 1
-            totalPages = result.totalPages ?? totalPages
+            totalPages = result.totalPages
+            
+            setLoaded()
+            lastFetchTime = Date()
         } catch {
-            errorMessage = error.localizedDescription
+            handleError(error)
         }
         
         isLoading = false

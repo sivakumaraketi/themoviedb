@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct themoviedbApp: App {
+    private let coordinator = AppCoordinator(dependencyContainer: DependencyContainer.shared)
+    
     var body: some Scene {
         WindowGroup {
-            SplashView()
+            coordinator.start()
         }
     }
 }
